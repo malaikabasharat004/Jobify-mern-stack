@@ -8,7 +8,7 @@ const Jobs = ({result}) => {
         {result.length} Jobs
       </h3>
     </div>
-      {result}
+      <section>{result}</section>
     </>
   )
 }

@@ -3,6 +3,7 @@ import Banner from '../components/Banner'
 import Jobs from './Jobs';
 import Card from '../components/Card';
 import Sidebar from '../sidebar/Sidebar';
+import Newsletter from '../components/Newsletter';
 
 const Home = () => {
   const [selectedCategory, setSelectedCategory]=useState(null)
@@ -41,6 +42,27 @@ const Home = () => {
     setSelectedCategory(event.target.value)
   }
 
+  //  Calculate the index range
+  const calculatePageRange = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return {startIndex, endIndex}
+  }
+
+  //  Function for next page
+  const nextPage = () => {
+    if (currentPage < Math.ceil(filteredItems.length/itemsPerPage)){
+      setCurrentPage(currentPage + 1)
+    }
+  }
+
+  // Function for previous Page
+  const prevPage = () =>{
+    if(currentPage>1){
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
   // Main FUnction
   const filteredData = (jobs, selected, query)=>{
     let filteredJobs=jobs;
@@ -51,15 +73,30 @@ const Home = () => {
       filteredJobs=filteredItems;
     }
     if(selected){
-      filteredJobs=filteredJobs.filter(({jobLocation,maxPrice,experienceLevel, salaryType,employmentType,postingDate}) =>(
+      filteredJobs=filteredJobs.filter(
+        ({
+          jobLocation,
+          maxPrice,
+          experienceLevel, 
+          salaryType,
+          employmentType,
+          postingDate}) =>(
         jobLocation.toLowerCase() === selected.toLowerCase() ||
         parseInt(maxPrice) <= parseInt(selected) ||
+        postingDate >= selected ||
         salaryType.toLowerCase() === selected.toLowerCase() ||
+        experienceLevel.toLowerCase() === selected.toLowerCase() ||
         employmentType.toLowerCase() === selected.toLowerCase() 
 
       ))
       console.log(filteredJobs)
     }
+
+    // SLice the data based on current Page
+    const {startIndex, endIndex} = calculatePageRange();
+    filteredJobs = filteredJobs.slice(startIndex, endIndex)
+
+
     return filteredJobs.map((data,i) => <Card key={i} data={data}/>)
 
   }
@@ -87,9 +124,30 @@ const Home = () => {
           <p>No Data Found!</p>
           </>
         }
+        {/* {Pagination} */}
+        {
+          result.length > 0 ? (
+            <div className='flex justify-center mt-4 space-x-8'>
+              <button onClick={prevPage}
+                      disabled={currentPage === 1}
+                      className='hover:underline'>
+                Previous
+              </button>
+              
+              <span className='mx-2'>Page {currentPage} of {Math.ceil(filteredItems.length / itemsPerPage)}</span>
+              
+              <button onClick={nextPage} 
+                      disabled={currentPage === Math.ceil(filteredItems.length/itemsPerPage)}
+                      className='hover:underline'>
+                Next
+              </button>
+            </div>
+          ): ""
+        }
+
         </div>
         {/* Right Side */}
-        <div className='bg-white p-4 rounded'>Right</div>
+        <div className='bg-white p-4 rounded'><Newsletter/></div>
 
       </div>
     </div>

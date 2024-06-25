@@ -23,7 +23,7 @@ const Navbar = () => {
                     <svg xmlns="../public/logo.png" width="29" height="30" viewBox='0 0 29 30' fill='none'>
                         <circle cx="12.0143" cy="12.1543" r="12.0143" fill="#3575E2" fillOpacity="0.4" />
                         <circle cx="16.9857" cy="17.0143" r="12.0143" fill="#3575E2" />
-                    </svg><span>Job Portal</span>
+                    </svg><span>Jobify</span>
                 </a>
                 {/* {Nav Bars for Large Devices} */}
                 <ul className='hidden md:flex gap-12'>
